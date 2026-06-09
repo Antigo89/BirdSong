@@ -1,6 +1,7 @@
 #include <SPI.h>
 #include <SD.h>
 #include <TMRpcm.h>
+#include "avr/sleep.h"
 #define TESTMODE
 #define LED_ACTIVATE
 
@@ -37,7 +38,7 @@ void setup() {
   }
   tmrpcm.quality(1);
   tmrpcm.volume(5);
-    
+  playmode = false;
 }
 
 void loop() {
@@ -55,6 +56,10 @@ void loop() {
   }else{
     tmrpcm.stopPlayback();
     digitalWrite(AUDIO_PIN, LOW);
+    set_sleep_mode(SLEEP_MODE_PWR_DOWN);
+    sleep_enable(); 
+    sleep_cpu();
+    sleep_disable();
   }
   #ifdef TESTMODE
   Serial.print("playmode = ");
